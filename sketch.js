@@ -1,4 +1,4 @@
-
+export function sketchy() {
 
 let capture;
 let posenet;
@@ -154,3 +154,4 @@ function draw() { // this function code runs in infinite loop
     
 }
 
+}
