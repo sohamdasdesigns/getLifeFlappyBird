@@ -1,4 +1,4 @@
-export function sketchy() {
+export default function sketchy() {
 
 let capture;
 let posenet;
