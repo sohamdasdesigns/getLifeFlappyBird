@@ -1,7 +1,7 @@
 var cvs = document.getElementById("canvas1");
 var ctx = cvs.getContext("2d");
 
-import sketchy from '.\sketch.js'
+import sketchy from './sketch.js'
 console.log('stroke', sketchy.stroke_new);
 
 // load images
