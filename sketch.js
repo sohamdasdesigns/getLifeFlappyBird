@@ -171,7 +171,7 @@ bY = 394 - 394 * ((stn -60) / (130 -60)) // (canvas - fg.height) = (512 - 118)
     drawingContext.fillText("Flappy had a lot of vodka.. Flappy cant fly properly.. ",10, 512 -60);
     drawingContext.fillText("Flappy knows 'Drink and Fly' is bad..",10, 512 -45);
     drawingContext.font = "15px Verdana";
-    drawingContext.fillText("Move you HAND UP, DOWN and STILL,  ",10, 512 -30);
+    drawingContext.fillText("Move your HAND UP, DOWN and STILL,  ",10, 512 -30);
     drawingContext.font = "12px Verdana";
     drawingContext.fillText("LIKE A BIRD, to guide drunk flappy..",10, 512 -15);
   
