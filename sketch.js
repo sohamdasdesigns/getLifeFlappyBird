@@ -167,13 +167,13 @@ bY = 394 - 394 * ((stn -60) / (130 -60)) // (canvas - fg.height) = (512 - 118)
     drawingContext.fillStyle = "#000";
     drawingContext.font = "20px Verdana";
     drawingContext.fillText("Score : "+score,10, 512 -80);
-    drawingContext.font = "12px Verdana";
-    drawingContext.fillText("Flappy had a lot of vodka.. Flappy cant fly properly.. ",10, 512 -60);
-    drawingContext.fillText("Flappy knows 'Drink and Fly' is bad..",10, 512 -45);
-    drawingContext.font = "15px Verdana";
-    drawingContext.fillText("Move your RIGHT HAND UP, DOWN,  ",10, 512 -30);
-    drawingContext.font = "12px Verdana";
-    drawingContext.fillText("and STILL, LIKE A BIRD, to guide drunk flappy..",10, 512 -15);
+    // drawingContext.font = "12px Verdana";
+    // drawingContext.fillText("Flappy had a lot of vodka.. Flappy cant fly properly.. ",10, 512 -60);
+    // drawingContext.fillText("Flappy knows 'Drink and Fly' is bad..",10, 512 -45);
+    // drawingContext.font = "15px Verdana";
+    // drawingContext.fillText("Move your RIGHT HAND UP, DOWN,  ",10, 512 -30);
+    // drawingContext.font = "12px Verdana";
+    // drawingContext.fillText("and STILL, LIKE A BIRD, to guide drunk flappy..",10, 512 -15);
   
     
 }
