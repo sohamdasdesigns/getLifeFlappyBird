@@ -1,44 +1,330 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>getLife Gamification : Drunk Flappy</title>
-    <link rel = "icon" href = "https://raw.githubusercontent.com/sohamdasdesigns/getLifeThesis/main/static/page3/getLife_Logo.png" type = "image/x-icon">
-    <img src="https://raw.githubusercontent.com/sohamdasdesigns/getLifeThesis/main/static/page3/getLife_Logo.png" width="80" height="40" style="padding-top: 2%; padding-bottom: 2%; text-align: center; position: relative; left: 1%; top: 3%; " ></img>
-    
-    <script src="ml5.min.js"></script>
+    <link rel="icon" href="https://raw.githubusercontent.com/sohamdasdesigns/getLifeThesis/main/static/page3/getLife_Logo.png" />
     <script src="p5.js"></script>
     <script src="p5.sound.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="utf-8">
+    <script src="ml5.min.js"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
-      a{
-          text-decoration: none;
-          color: rgb(0, 0, 0);
-          background: rgb(255, 226, 29);
-          padding: 7px 10px;
-          border-radius: 4px;  
-          font-size: 29px;
+      :root{ --paper:#f8f5ef; --ink:#1f1f1f; }
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:EB Garamond, serif;background:var(--paper);color:var(--ink)}
+      .titlebar{position:fixed;top:0;left:0;width:100%;height:74px;background:rgba(248,245,239,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid #d9d3c8;display:flex;align-items:center}
+      .titlebar-inner{width:100%;padding:0 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+      .titlebar-logos img{height:26px}
+      main{display:flex;align-items:center;justify-content:center;padding:120px 0 60px}
+
+      /* deck styles */
+      .deck-wrapper{display:flex;align-items:center;justify-content:center;gap:20px;width:min(76vw,960px);height:min(60vh,660px);max-height:660px;position:relative}
+      .deck{position:relative;flex:1;height:100%;max-width:780px}
+      .card{position:absolute;inset:0;border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 26px 65px rgba(0,0,0,0.12);opacity:0;transform:scale(0.94);transition:opacity .35s ease,transform .35s ease;pointer-events:none}
+      .card.active{opacity:1;transform:scale(1);pointer-events:auto}
+      .card img{width:100%;height:100%;object-fit:contain;display:block}
+
+      .trainer-card-wrapper{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
+      .trainer-card-wrapper canvas{display:block;width:auto;height:84%}
+      .trainer-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+      .trainer-overlay-inner{pointer-events:auto;max-width:84%;background:rgba(255,255,255,0.96);padding:18px 22px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.12);text-align:center}
+      .trainer-overlay-text{margin:0 0 10px;color:#111;font-size:1rem}
+      .trainer-allow-btn{all:unset;cursor:pointer;padding:6px 10px;border-radius:999px;background:#7b5b3b;color:#fff;font-weight:700;font-size:0.88rem}
+      .trainer-overlay[aria-hidden="true"]{opacity:0;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease}
+      .trainer-overlay[aria-hidden="false"]{opacity:1;transform:none}
+
+      .deck-control{all:unset;cursor:pointer;width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,0.95);border:1px solid rgba(0,0,0,0.08);box-shadow:0 12px 28px rgba(0,0,0,0.12);display:grid;place-items:center;font-size:1.4rem;font-weight:700;color:#111}
+      .deck-last{position:absolute;bottom:18px;right:18px;z-index:2;width:auto;min-width:82px;padding:0 14px;height:42px;border-radius:999px;font-size:.95rem;font-weight:700}
+
+      .page-footer{display:flex;justify-content:center;gap:14px;margin:24px auto 36px;max-width:760px;padding:0 20px}
+      .site-link{all:unset;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:140px;height:46px;border-radius:999px;background:#7b5b3b;color:#fff;font-size:0.96rem;font-weight:700;text-decoration:none}
+
+      @media(max-width:700px){main{padding-top:140px}.deck-wrapper{flex-direction:column;height:auto}}
+    </style>
+  <style>
+      main{display:flex;align-items:center;justify-content:center;padding:120px 40px 60px}
+      .split-layout{width:min(1200px,100%);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+      .game-side,.tutorial-side{min-width:0;display:flex;align-items:center;justify-content:center}
+      .game-side{height:560px}
+      .trainer-card-wrapper{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+      .trainer-card-wrapper canvas{display:block!important;width:auto!important;height:512px!important;max-width:100%!important;max-height:100%!important;margin:0!important}
+      .tutorial-side img{display:block;width:100%;height:auto;max-height:560px;object-fit:contain}
+      @media(max-width:800px){.split-layout{grid-template-columns:1fr}.game-side{height:512px}}
+    </style>
+
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden !important;
       }
-      a:hover{
-          background: rgb(255 226 26 / 68%);
+
+      body {
+        min-height: 100vh !important;
+        height: 100vh !important;
+        display: grid;
+        grid-template-rows: 72px minmax(0, 1fr) 92px;
       }
-      a:focus{
-          outline: 3px solid rgb(255 226 26 / 50%);
+
+      header {
+        height: 72px !important;
+        min-height: 72px !important;
+        box-sizing: border-box;
       }
-      body{
-          font-family: monospace;
+
+      main {
+        min-height: 0 !important;
+        height: auto !important;
+        padding: 16px 40px !important;
+        overflow: hidden !important;
+        box-sizing: border-box;
       }
-  </style>
-  </head>
+
+      .split-layout {
+        width: min(1200px, 100%) !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        gap: 48px !important;
+        align-items: center !important;
+      }
+
+      .game-side,
+      .tutorial-side {
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+
+      .game-side .trainer-card-wrapper {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+      }
+
+      .game-side .trainer-card-wrapper canvas {
+        width: auto !important;
+        height: auto !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        aspect-ratio: 288 / 512;
+        object-fit: contain;
+      }
+
+      .tutorial-side img {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+      }
+
+      footer {
+        height: 92px !important;
+        min-height: 92px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box;
+      }
+    </style>
+
+
+<style>
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden !important;
+}
+
+body {
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  display: grid !important;
+  grid-template-rows: 74px minmax(0, 1fr) 92px !important;
+}
+
+.titlebar {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 74px !important;
+  grid-row: 1 !important;
+  z-index: 10;
+}
+
+main {
+  grid-row: 2 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  padding: 18px 40px !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.split-layout {
+  width: min(1200px, 100%) !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 48px !important;
+  align-items: center !important;
+}
+
+.game-side,
+.tutorial-side {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.trainer-card-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.trainer-card-wrapper canvas {
+  display: block !important;
+  width: auto !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: 288 / 512 !important;
+  margin: 0 !important;
+}
+
+.tutorial-side img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+}
+
+.page-footer {
+  grid-row: 3 !important;
+  width: 100% !important;
+  height: 92px !important;
+  min-height: 92px !important;
+  margin: 0 !important;
+  padding: 0 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  overflow: hidden !important;
+}
+
+@media (max-width: 800px) {
+  .split-layout {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+  main {
+    padding: 14px 20px !important;
+  }
+}
+</style>
+
+<style>
+.page-footer{
+position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;
+transform:none!important;width:100%!important;margin:0!important;padding:0!important;
+display:flex!important;flex-direction:row!important;align-items:center!important;
+justify-content:center!important;gap:14px!important;box-sizing:border-box!important}
+.page-footer a,.page-footer button{margin:0!important}
+</style>
+
+<style>
+body > footer,
+footer {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  top: auto !important;
+  transform: none !important;
+  grid-row: 3 !important;
+  width: 100vw !important;
+  max-width: none !important;
+  height: 92px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+}
+
+body > footer > *,
+footer > * {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+</style>
+
+</head>
   <body>
-    <div style="padding-left: 40%;">
+    <div class="titlebar"><div class="titlebar-inner"><div class="titlebar-logos"><img src="https://raw.githubusercontent.com/sohamdasdesigns/getLifeThesis/main/static/page3/getLife_Logo.png" alt="logo"></div><div class="titlebar-title">getLife Gamification · Drunk Flappy</div><div></div></div></div>
+
+    <main>
+      <section class="split-layout">
+        <div class="game-side">
+          <div id="trainer-card-wrapper" class="trainer-card-wrapper">
+            <div id="trainer-overlay" class="trainer-overlay" aria-hidden="false">
+              <div class="trainer-overlay-inner">
+                <p class="trainer-overlay-text">please, grant camera permission to experience the prototype.</p>
+                <div class="trainer-overlay-actions"><button id="trainer-allow" class="trainer-allow-btn">Allow camera</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tutorial-side">
+          <img src="images/tutorial_flappy.png" alt="Tutorial">
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <a class="site-link" href="../getLifeThesis/index.html" target="_blank" rel="noopener">thesis</a>
+      <a class="site-link" href="../getLife/index.html" target="_blank" rel="noopener">trainer</a>
+    </footer>
+
     <script src="sketch.js"></script>
-    <div>
-      <h1 style="font-family: monospace; padding-top: 2%; padding-bottom: 2%; text-align: center; position: fixed; left: 10%; top: 2%;">Motivation </h1>
-      
-      <img src="https://raw.githubusercontent.com/sohamdasdesigns/getLifeFlappyBird/main/images/tutorial_flappy.png" width="600" height="336" style="text-align: center; position: fixed; right: 4%; top: 9%; " ></img>
-      <h4 style="position: fixed; text-align: right; right: 4%; top: 50%;"><a href="https://sohamdasdesigns.github.io/getLife/" target="_blank" style="font-size: 15px;">getLifeTrainer &raquo;</a></h4>
-      <h4 style="position: fixed; text-align: right; right: 4%; top: 60%;"><a href="https://sohamdasdesigns.github.io/getLifeThesis/index_6.html" target="_blank" style="font-size: 15px;">get More Info &raquo;</a></h4>
-      <h4 style="position: fixed; text-align: right; right: 4%; top: 63%;">get more Details in Thesis book</a></h4>
-      <h4 style="font-family: monospace; bottom: 6%; padding-right: 4%; padding-bottom: 6%; position: absolute; ">Note: Please use a PC or Mac for a better gaming experience.</h4><br>
-      
-</body></html>
+    <script>
+    (function(){
+      const trainerOverlay = document.getElementById('trainer-overlay');
+      const trainerAllow = document.getElementById('trainer-allow');
+
+      if (trainerAllow) {
+        trainerAllow.addEventListener('click', ()=>{
+          if (window.startTrainer) window.startTrainer();
+          if (trainerOverlay) trainerOverlay.setAttribute('aria-hidden','true');
+        });
+      }
+    })();
+    </script>
+  </body>
+</html>

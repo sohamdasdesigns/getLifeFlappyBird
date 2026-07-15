@@ -5,3 +5,23 @@ html, body {
 canvas {
   display: block;
 }
+
+
+/* Functional trainer canvas containment fix — no layout redesign */
+#trainer-card-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#trainer-card-wrapper canvas {
+  display: block !important;
+  width: auto !important;
+  height: 84% !important;
+  max-width: 100% !important;
+  max-height: 84% !important;
+  margin: 0 !important;
+  flex: 0 0 auto;
+}
