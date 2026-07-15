@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>getLife Gamification : Drunk Flappy</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/sohamdasdesigns/getLifeThesis/main/static/page3/getLife_Logo.png" />
+    <title>Soham Das - getLife Gamification</title>
+    <link rel="icon" type="image/png" href="static/DA_favicon.png" />
     <script src="p5.js"></script>
     <script src="p5.sound.min.js"></script>
     <script src="ml5.min.js"></script>
@@ -284,10 +284,35 @@ footer > * {
   margin-right: 0 !important;
 }
 </style>
+<style>
+    :root{ --paper:#f8f5ef; --ink:#1f1f1f; --line:#d9d3c8; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:EB Garamond, serif;background:var(--paper);color:var(--ink);}
+    /* Title bar (copied from thesis book) */
+    .titlebar{position:fixed;top:0;left:0;width:100%;height:74px;background:rgba(248,245,239,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line);z-index:100;display:flex;align-items:center}
+    .titlebar-inner{width:100%;padding:0 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px}
+    .titlebar-logos{display:flex;align-items:center;gap:18px}
+    .titlebar-logos img{height:26px;width:auto;display:block}
+    .titlebar-logos .da-logo{height:22px}
+    .divider{width:1px;height:28px;background:var(--line);opacity:.6}
+    .titlebar-title{text-align:center;font-size:.95rem;letter-spacing:.08em;white-space:nowrap;opacity:.85;font-weight:600}
+    .titlebar-spacer{justify-self:end}
+  </style>
 
 </head>
   <body>
-    <div class="titlebar"><div class="titlebar-inner"><div class="titlebar-logos"><img src="https://raw.githubusercontent.com/sohamdasdesigns/getLifeThesis/main/static/page3/getLife_Logo.png" alt="logo"></div><div class="titlebar-title">getLife Gamification · Drunk Flappy</div><div></div></div></div>
+    
+    <div class="titlebar">
+    <div class="titlebar-inner">
+      <div class="titlebar-logos">
+        <img src="static/DAlogo_wordmark_transparent_black.png" alt="Domus Academy Milano" class="da-logo"/>
+        <div class="divider"></div>
+        <img src="static/Technogym_Logo_svg.webp" alt="Technogym"/>
+      </div>
+      <div class="titlebar-title">Master's Thesis Project · getLife Gamification Prototype</div>
+      <div class="titlebar-spacer"></div>
+    </div>
+  </div>
 
     <main>
       <section class="split-layout">
@@ -308,8 +333,8 @@ footer > * {
     </main>
 
     <footer class="page-footer">
-      <a class="site-link" href="../getLifeThesis/index.html" target="_blank" rel="noopener">thesis</a>
-      <a class="site-link" href="../getLife/index.html" target="_blank" rel="noopener">trainer</a>
+      <a class="site-link" href="../getLifeThesis/" target="_blank" rel="noopener">thesis</a>
+      <a class="site-link" href="../getLife/" target="_blank" rel="noopener">trainer</a>
     </footer>
 
     <script src="sketch.js"></script>
